@@ -25,3 +25,24 @@ func databaseUserToUser(dbUser database.User) User {
 		UpdatedAt: dbUser.UpdatedAt,
 	}
 }
+
+type Feed struct {
+	ID        string    `json:"id"`
+	Name      string    `json:"name"`
+	CreatedAt time.Time `json:"created_at"`
+	UpdatedAt time.Time `json:"updated_at"`
+	Url	string	`json:"url"`
+	UserID string `json:"user_id"`
+}
+
+
+func databaseFeedToFeed(dbFeed database.Feed) Feed {
+	return Feed{
+		ID:        dbFeed.ID.String(),
+		Name:      dbFeed.Name,
+		CreatedAt: dbFeed.CreatedAt,
+		UpdatedAt: dbFeed.UpdatedAt,
+		Url:	dbFeed.Url,
+		UserID: dbFeed.UserID.String(),
+	}
+}

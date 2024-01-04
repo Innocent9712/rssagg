@@ -1,9 +1,4 @@
--- name: CreateUser :one
-INSERT INTO users (id, created_at, updated_at, name, api_key)
-VALUES ($1, $2, $3, $4, encode(sha256(random()::text::bytea), 'hex'))
+-- name: CreateFeed :one
+INSERT INTO feeds (id, created_at, updated_at, name, url, user_id)
+VALUES ($1, $2, $3, $4, $5, $6)
 RETURNING *;
-
--- name: GetUserByAPIKey :one
-SELECT * FROM users 
--- WHERE api_key = decode($1, 'hex');
-WHERE api_key = $1;
