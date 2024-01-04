@@ -6,7 +6,6 @@ import (
 	"net/http"
 )
 
-
 func respondWithError(w http.ResponseWriter, code int, message string) {
 	if code > 499 {
 		log.Println("Responding with 5XX error:", message)
@@ -29,6 +28,7 @@ func respondWithJSON(w http.ResponseWriter, code int, payload interface{}) {
 		return
 	}
 
+	log.Printf("Responding with %d\n", code)
 	w.Header().Add("Content-Type", "application/json")
 	w.WriteHeader(code)
 	w.Write(data)

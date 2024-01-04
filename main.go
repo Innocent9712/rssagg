@@ -20,14 +20,13 @@ type apiConfig struct {
 	DB *database.Queries
 }
 
-func main()  {
+func main() {
 	fmt.Println("Hi There")
 	godotenv.Load(".env")
 
 	// get the port from env file
 	port := os.Getenv("PORT")
-	
-	
+
 	if port == "" {
 		log.Fatal("PORT not found in env")
 	}
@@ -52,26 +51,25 @@ func main()  {
 
 	router := chi.NewRouter()
 	router.Use(cors.Handler(cors.Options{
-		AllowedOrigins: []string{"https://*", "http://"},
-		AllowedMethods: []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
-		AllowedHeaders: []string{"*"},
-		ExposedHeaders: []string{"Link"},
+		AllowedOrigins:   []string{"https://*", "http://"},
+		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+		AllowedHeaders:   []string{"*"},
+		ExposedHeaders:   []string{"Link"},
 		AllowCredentials: false,
-		MaxAge: 300,
+		MaxAge:           300,
 	}))
 
 	v1Router := chi.NewRouter()
 	v1Router.Get("/healthz", handlerReadiness)
 	v1Router.Get("/err", handlerError)
 	v1Router.Post("/users", apiCfg.handlerCreateUser)
+	v1Router.Get("/users", apiCfg.handlerGetUser)
 
 	router.Mount("/v1", v1Router)
 
-
-
 	srv := &http.Server{
 		Handler: router,
-		Addr: ":" + port,
+		Addr:    ":" + port,
 	}
 
 	log.Println("Starting server on port", port)
@@ -82,10 +80,8 @@ func main()  {
 		log.Fatal(err)
 	}
 
-
 	fmt.Println("Port:", port)
 }
-
 
 // go get github.com/joho/godotenv // this installs a package to pull env from .env file
 // go mod vendor // generate local copies of dependencies in ./vendor
