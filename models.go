@@ -46,3 +46,30 @@ func databaseFeedToFeed(dbFeed database.Feed) Feed {
 		UserID: dbFeed.UserID.String(),
 	}
 }
+
+func databaseFeedsToFeeds(dbFeeds []database.Feed) []Feed {
+	feeds := make([]Feed, 0)
+	for _, feed := range dbFeeds {
+		feeds = append(feeds, databaseFeedToFeed(feed))
+	}
+	return feeds
+}
+
+
+type FeedFollow struct {
+	ID        string    `json:"id"`
+	CreatedAt time.Time `json:"created_at"`
+	UpdatedAt time.Time `json:"updated_at"`
+	UserID   string `json:"user_id"`
+	FeedID   string `json:"feed_id"`
+}
+
+func databaseFeedFollowToFeedFollow(dbFeedFollow database.FeedFollow) FeedFollow {
+	return FeedFollow{
+		ID:        dbFeedFollow.ID.String(),
+		CreatedAt: dbFeedFollow.CreatedAt,
+		UpdatedAt: dbFeedFollow.UpdatedAt,
+		UserID:   dbFeedFollow.UserID.String(),
+		FeedID:   dbFeedFollow.FeedID.String(),
+	}
+}

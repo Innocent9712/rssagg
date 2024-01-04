@@ -1,0 +1,13 @@
+-- +goose Up
+CREATE TABLE if not EXISTS feed_follows (
+    -- id SERIAL PRIMARY KEY,
+    id UUID PRIMARY KEY,
+    user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    feed_id UUID NOT NULL REFERENCES feeds(id) ON DELETE CASCADE,
+    UNIQUE(user_id, feed_id),
+    created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+-- +goose Down
+DROP TABLE if EXISTS feed_follows;
