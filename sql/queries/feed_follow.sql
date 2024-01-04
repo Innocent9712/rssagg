@@ -5,6 +5,9 @@ VALUES ($1, $2, $3, $4, $5)
 RETURNING *;
 
 -- name: GetFeedFollows :many
-SELECT * FROM feed_follows
-WHERE user_id = $1
-ORDER BY created_at DESC;
+SELECT feed_follows.*, feeds.*
+FROM feed_follows
+JOIN feeds ON feed_follows.feed_id = feeds.id
+WHERE feed_follows.user_id = $1
+ORDER BY feed_follows.created_at DESC;
+

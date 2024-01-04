@@ -64,6 +64,11 @@ type FeedFollow struct {
 	FeedID   string `json:"feed_id"`
 }
 
+type FeedFollows struct {
+	FeedFollow
+	Feed Feed `json:"feed"`
+}
+
 func databaseFeedFollowToFeedFollow(dbFeedFollow database.FeedFollow) FeedFollow {
 	return FeedFollow{
 		ID:        dbFeedFollow.ID.String(),
@@ -72,4 +77,29 @@ func databaseFeedFollowToFeedFollow(dbFeedFollow database.FeedFollow) FeedFollow
 		UserID:   dbFeedFollow.UserID.String(),
 		FeedID:   dbFeedFollow.FeedID.String(),
 	}
+}
+
+func databaseFeedFollowsToFeedFollows(dbFeedFollows []database.GetFeedFollowsRow) []FeedFollows {
+	feedFollows := make([]FeedFollows, 0)
+	for _, dbFeedFollow := range dbFeedFollows {
+		feedFollow := FeedFollows{
+			FeedFollow: FeedFollow{
+				ID:        dbFeedFollow.ID.String(), // Assuming ID is part of GetFeedFollowsRow
+				CreatedAt: dbFeedFollow.CreatedAt,
+				UpdatedAt: dbFeedFollow.UpdatedAt, // Assuming UpdatedAt is part of GetFeedFollowsRow
+				UserID:    dbFeedFollow.UserID.String(),
+				FeedID:    dbFeedFollow.FeedID.String(),
+			},
+			Feed: Feed{
+				ID:        dbFeedFollow.ID_2.String(), // Assuming FeedID is part of GetFeedFollowsRow
+				Name:      dbFeedFollow.Name,                // You might need to fetch this information from the database
+				CreatedAt: dbFeedFollow.CreatedAt_2,                   // Replace with actual database field
+				UpdatedAt: dbFeedFollow.UpdatedAt_2,                   // Replace with actual database field
+				Url:       dbFeedFollow.Url,    // Replace with actual database field
+				UserID:    dbFeedFollow.UserID_2.String(),
+			},
+		}
+		feedFollows = append(feedFollows, feedFollow)
+	}
+	return feedFollows
 }

@@ -47,26 +47,48 @@ func (q *Queries) CreateFeedFollow(ctx context.Context, arg CreateFeedFollowPara
 }
 
 const getFeedFollows = `-- name: GetFeedFollows :many
-SELECT id, user_id, feed_id, created_at, updated_at FROM feed_follows
-WHERE user_id = $1
-ORDER BY created_at DESC
+SELECT feed_follows.id, feed_follows.user_id, feed_follows.feed_id, feed_follows.created_at, feed_follows.updated_at, feeds.id, feeds.created_at, feeds.updated_at, feeds.name, feeds.url, feeds.user_id
+FROM feed_follows
+JOIN feeds ON feed_follows.feed_id = feeds.id
+WHERE feed_follows.user_id = $1
+ORDER BY feed_follows.created_at DESC
 `
 
-func (q *Queries) GetFeedFollows(ctx context.Context, userID uuid.UUID) ([]FeedFollow, error) {
+type GetFeedFollowsRow struct {
+	ID          uuid.UUID
+	UserID      uuid.UUID
+	FeedID      uuid.UUID
+	CreatedAt   time.Time
+	UpdatedAt   time.Time
+	ID_2        uuid.UUID
+	CreatedAt_2 time.Time
+	UpdatedAt_2 time.Time
+	Name        string
+	Url         string
+	UserID_2    uuid.UUID
+}
+
+func (q *Queries) GetFeedFollows(ctx context.Context, userID uuid.UUID) ([]GetFeedFollowsRow, error) {
 	rows, err := q.db.QueryContext(ctx, getFeedFollows, userID)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	var items []FeedFollow
+	var items []GetFeedFollowsRow
 	for rows.Next() {
-		var i FeedFollow
+		var i GetFeedFollowsRow
 		if err := rows.Scan(
 			&i.ID,
 			&i.UserID,
 			&i.FeedID,
 			&i.CreatedAt,
 			&i.UpdatedAt,
+			&i.ID_2,
+			&i.CreatedAt_2,
+			&i.UpdatedAt_2,
+			&i.Name,
+			&i.Url,
+			&i.UserID_2,
 		); err != nil {
 			return nil, err
 		}
