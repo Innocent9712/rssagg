@@ -74,14 +74,14 @@ func startScraping(
 
 					// log.Printf("Post found: %v - On feed: %v\n", item.Title, feed.Name)
 					_, err = db.CreatePost(context.Background(), database.CreatePostParams{
-						ID: uuid.New(),
-						CreatedAt: time.Now().UTC(),
-						UpdatedAt: time.Now().UTC(),
-						Title: item.Title,
+						ID:          uuid.New(),
+						CreatedAt:   time.Now().UTC(),
+						UpdatedAt:   time.Now().UTC(),
+						Title:       item.Title,
 						Description: description,
-						Url: item.Link,
+						Url:         item.Link,
 						PublishedAt: pubDate,
-						FeedID: feed.ID,
+						FeedID:      feed.ID,
 					})
 
 					if err != nil {
