@@ -1,4 +1,4 @@
-package main
+package db
 
 import (
 	"encoding/json"
@@ -6,12 +6,12 @@ import (
 	"net/http"
 	"time"
 
-	// "github.com/Innocent9712/rssagg/internal/auth"
 	"github.com/Innocent9712/rssagg/internal/database"
+	"github.com/Innocent9712/rssagg/internal/models"
 	"github.com/google/uuid"
 )
 
-func (apiCfg *apiConfig) handlerCreateFeed(w http.ResponseWriter, r *http.Request, user database.User) {
+func (apiCfg *ApiConfig) HandlerCreateFeed(w http.ResponseWriter, r *http.Request, user database.User) {
 	type parameters struct {
 		Name string `json:"name"`
 		Url  string `json:"url"`
@@ -40,15 +40,15 @@ func (apiCfg *apiConfig) handlerCreateFeed(w http.ResponseWriter, r *http.Reques
 		return
 	}
 
-	respondWithJSON(w, http.StatusCreated, databaseFeedToFeed(feed))
+	respondWithJSON(w, http.StatusCreated, models.DatabaseFeedToFeed(feed))
 }
 
-func (apiCfg *apiConfig) handlerGetFeeds(w http.ResponseWriter, r *http.Request) {
+func (apiCfg *ApiConfig) HandlerGetFeeds(w http.ResponseWriter, r *http.Request) {
 	feeds, err := apiCfg.DB.GetFeeds(r.Context())
 	if err != nil {
 		respondWithError(w, http.StatusInternalServerError, fmt.Sprintf("Failed to get feeds: %v", err))
 		return
 	}
 
-	respondWithJSON(w, http.StatusOK, databaseFeedsToFeeds(feeds))
+	respondWithJSON(w, http.StatusOK, models.DatabaseFeedsToFeeds(feeds))
 }
