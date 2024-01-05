@@ -6,6 +6,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"time"
 
 	"github.com/Innocent9712/rssagg/internal/database"
 	"github.com/go-chi/chi/v5"
@@ -24,16 +25,16 @@ type apiConfig struct {
 func main() {
 	fmt.Println("Hi There")
 
-	// Testing RSS feed
-	// rss, err := urlToFeed("https://www.theverge.com/rss/index.xml")
-	rss, err := urlToFeed("https://wagslane.dev/index.xml")
-	if err != nil {
-		log.Fatal(err)
-	}
-	// fmt.Println(rss)
-	for _, item := range rss.Channel.Items {
-		fmt.Println(item.Title)
-	}
+	// // Testing RSS feed
+	// // rss, err := urlToFeed("https://www.theverge.com/rss/index.xml")
+	// rss, err := urlToFeed("https://wagslane.dev/index.xml")
+	// if err != nil {
+	// 	log.Fatal(err)
+	// }
+	// // fmt.Println(rss)
+	// for _, item := range rss.Channel.Items {
+	// 	fmt.Println(item.Title)
+	// }
 
 	godotenv.Load(".env")
 
@@ -61,6 +62,8 @@ func main() {
 	apiCfg := apiConfig{
 		DB: database.New(conn),
 	}
+
+	go startScraping(apiCfg.DB, 10, time.Minute) // start the rss feed scraper
 
 	router := chi.NewRouter()
 	router.Use(middleware.RequestID)

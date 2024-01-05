@@ -14,7 +14,7 @@ import (
 func (apiCfg *apiConfig) handlerCreateFeed(w http.ResponseWriter, r *http.Request, user database.User) {
 	type parameters struct {
 		Name string `json:"name"`
-		Url string `json:"url"`
+		Url  string `json:"url"`
 	}
 
 	decoder := json.NewDecoder(r.Body)
@@ -31,8 +31,8 @@ func (apiCfg *apiConfig) handlerCreateFeed(w http.ResponseWriter, r *http.Reques
 		CreatedAt: time.Now().UTC(),
 		UpdatedAt: time.Now().UTC(),
 		Name:      params.Name,
-		Url: params.Url,
-		UserID: user.ID,
+		Url:       params.Url,
+		UserID:    user.ID,
 	})
 
 	if err != nil {
@@ -42,7 +42,6 @@ func (apiCfg *apiConfig) handlerCreateFeed(w http.ResponseWriter, r *http.Reques
 
 	respondWithJSON(w, http.StatusCreated, databaseFeedToFeed(feed))
 }
-
 
 func (apiCfg *apiConfig) handlerGetFeeds(w http.ResponseWriter, r *http.Request) {
 	feeds, err := apiCfg.DB.GetFeeds(r.Context())

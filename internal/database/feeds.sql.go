@@ -104,26 +104,42 @@ func (q *Queries) GetFeeds(ctx context.Context) ([]Feed, error) {
 	return items, nil
 }
 
-const getNextFeedToFetch = `-- name: GetNextFeedToFetch :one
+const getNextFeedsToFetch = `-- name: GetNextFeedsToFetch :many
 SELECT id, created_at, updated_at, name, url, user_id, last_fetched_at FROM feeds
 ORDER BY last_fetched_at ASC NULLS FIRST
-LIMIT 1
+LIMIT $1
 `
 
-// This should fetch feeds by null or by oldest date of last_fetched_at
-func (q *Queries) GetNextFeedToFetch(ctx context.Context) (Feed, error) {
-	row := q.db.QueryRowContext(ctx, getNextFeedToFetch)
-	var i Feed
-	err := row.Scan(
-		&i.ID,
-		&i.CreatedAt,
-		&i.UpdatedAt,
-		&i.Name,
-		&i.Url,
-		&i.UserID,
-		&i.LastFetchedAt,
-	)
-	return i, err
+// This should fetch a batch of feeds by null or by oldest date of last_fetched_at
+func (q *Queries) GetNextFeedsToFetch(ctx context.Context, limit int32) ([]Feed, error) {
+	rows, err := q.db.QueryContext(ctx, getNextFeedsToFetch, limit)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []Feed
+	for rows.Next() {
+		var i Feed
+		if err := rows.Scan(
+			&i.ID,
+			&i.CreatedAt,
+			&i.UpdatedAt,
+			&i.Name,
+			&i.Url,
+			&i.UserID,
+			&i.LastFetchedAt,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
 }
 
 const markFeedFetched = `-- name: MarkFeedFetched :one

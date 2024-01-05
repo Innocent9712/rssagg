@@ -11,11 +11,11 @@ WHERE id = $1 LIMIT 1;
 SELECT * FROM feeds;
 
 
--- name: GetNextFeedToFetch :one
--- This should fetch feeds by null or by oldest date of last_fetched_at
+-- name: GetNextFeedsToFetch :many
+-- This should fetch a batch of feeds by null or by oldest date of last_fetched_at
 SELECT * FROM feeds
 ORDER BY last_fetched_at ASC NULLS FIRST
-LIMIT 1;
+LIMIT $1;
 
 -- name: MarkFeedFetched :one
 UPDATE feeds

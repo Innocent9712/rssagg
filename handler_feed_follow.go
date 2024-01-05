@@ -37,8 +37,8 @@ func (apiCfg *apiConfig) handlerCreateFeedFollow(w http.ResponseWriter, r *http.
 		ID:        uuid.New(),
 		CreatedAt: time.Now().UTC(),
 		UpdatedAt: time.Now().UTC(),
-		FeedID:      feedID,
-		UserID: user.ID,
+		FeedID:    feedID,
+		UserID:    user.ID,
 	})
 
 	if err != nil {
@@ -59,7 +59,6 @@ func (apiCfg *apiConfig) handlerGetFeedFollows(w http.ResponseWriter, r *http.Re
 	respondWithJSON(w, http.StatusOK, databaseFeedFollowsToFeedFollows(feedFollows))
 }
 
-
 func (apiCfg *apiConfig) handlerDeleteFeedFollow(w http.ResponseWriter, r *http.Request, user database.User) {
 	feedFollowID, err := uuid.Parse(chi.URLParam(r, "feedFollowID"))
 
@@ -69,7 +68,7 @@ func (apiCfg *apiConfig) handlerDeleteFeedFollow(w http.ResponseWriter, r *http.
 	}
 
 	err = apiCfg.DB.DeleteFeedFollows(r.Context(), database.DeleteFeedFollowsParams{
-		ID: feedFollowID,
+		ID:     feedFollowID,
 		UserID: user.ID,
 	})
 

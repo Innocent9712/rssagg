@@ -8,10 +8,9 @@ import (
 	"github.com/Innocent9712/rssagg/internal/database"
 )
 
-
 type authedHandler func(http.ResponseWriter, *http.Request, database.User)
 
-func (apiCfg *apiConfig) middlewareAuth (handler authedHandler) http.HandlerFunc {
+func (apiCfg *apiConfig) middlewareAuth(handler authedHandler) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		// user, err := apiCfg.DB.GetUserByAPIKey(r.Context(), r.Header.Get("X-API-Key"))
 		apiKey, err := auth.GetAPIKey(r.Header)

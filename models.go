@@ -31,10 +31,9 @@ type Feed struct {
 	Name      string    `json:"name"`
 	CreatedAt time.Time `json:"created_at"`
 	UpdatedAt time.Time `json:"updated_at"`
-	Url	string	`json:"url"`
-	UserID string `json:"user_id"`
+	Url       string    `json:"url"`
+	UserID    string    `json:"user_id"`
 }
-
 
 func databaseFeedToFeed(dbFeed database.Feed) Feed {
 	return Feed{
@@ -42,8 +41,8 @@ func databaseFeedToFeed(dbFeed database.Feed) Feed {
 		Name:      dbFeed.Name,
 		CreatedAt: dbFeed.CreatedAt,
 		UpdatedAt: dbFeed.UpdatedAt,
-		Url:	dbFeed.Url,
-		UserID: dbFeed.UserID.String(),
+		Url:       dbFeed.Url,
+		UserID:    dbFeed.UserID.String(),
 	}
 }
 
@@ -55,13 +54,12 @@ func databaseFeedsToFeeds(dbFeeds []database.Feed) []Feed {
 	return feeds
 }
 
-
 type FeedFollow struct {
 	ID        string    `json:"id"`
 	CreatedAt time.Time `json:"created_at"`
 	UpdatedAt time.Time `json:"updated_at"`
-	UserID   string `json:"user_id"`
-	FeedID   string `json:"feed_id"`
+	UserID    string    `json:"user_id"`
+	FeedID    string    `json:"feed_id"`
 }
 
 type FeedFollows struct {
@@ -74,8 +72,8 @@ func databaseFeedFollowToFeedFollow(dbFeedFollow database.FeedFollow) FeedFollow
 		ID:        dbFeedFollow.ID.String(),
 		CreatedAt: dbFeedFollow.CreatedAt,
 		UpdatedAt: dbFeedFollow.UpdatedAt,
-		UserID:   dbFeedFollow.UserID.String(),
-		FeedID:   dbFeedFollow.FeedID.String(),
+		UserID:    dbFeedFollow.UserID.String(),
+		FeedID:    dbFeedFollow.FeedID.String(),
 	}
 }
 
@@ -92,10 +90,10 @@ func databaseFeedFollowsToFeedFollows(dbFeedFollows []database.GetFeedFollowsRow
 			},
 			Feed: Feed{
 				ID:        dbFeedFollow.ID_2.String(), // Assuming FeedID is part of GetFeedFollowsRow
-				Name:      dbFeedFollow.Name,                // You might need to fetch this information from the database
-				CreatedAt: dbFeedFollow.CreatedAt_2,                   // Replace with actual database field
-				UpdatedAt: dbFeedFollow.UpdatedAt_2,                   // Replace with actual database field
-				Url:       dbFeedFollow.Url,    // Replace with actual database field
+				Name:      dbFeedFollow.Name,          // You might need to fetch this information from the database
+				CreatedAt: dbFeedFollow.CreatedAt_2,   // Replace with actual database field
+				UpdatedAt: dbFeedFollow.UpdatedAt_2,   // Replace with actual database field
+				Url:       dbFeedFollow.Url,           // Replace with actual database field
 				UserID:    dbFeedFollow.UserID_2.String(),
 			},
 		}
