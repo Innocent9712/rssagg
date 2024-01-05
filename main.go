@@ -23,6 +23,18 @@ type apiConfig struct {
 
 func main() {
 	fmt.Println("Hi There")
+
+	// Testing RSS feed
+	// rss, err := urlToFeed("https://www.theverge.com/rss/index.xml")
+	rss, err := urlToFeed("https://wagslane.dev/index.xml")
+	if err != nil {
+		log.Fatal(err)
+	}
+	// fmt.Println(rss)
+	for _, item := range rss.Channel.Items {
+		fmt.Println(item.Title)
+	}
+
 	godotenv.Load(".env")
 
 	// get the port from env file
