@@ -1,4 +1,4 @@
-package main
+package db
 
 import (
 	"encoding/json"
@@ -8,10 +8,11 @@ import (
 
 	// "github.com/Innocent9712/rssagg/internal/auth"
 	"github.com/Innocent9712/rssagg/internal/database"
+	"github.com/Innocent9712/rssagg/internal/models"
 	"github.com/google/uuid"
 )
 
-func (apiCfg *apiConfig) handlerCreateUser(w http.ResponseWriter, r *http.Request) {
+func (apiCfg *ApiConfig) HandlerCreateUser(w http.ResponseWriter, r *http.Request) {
 	type parameters struct {
 		Name string `json:"name"`
 	}
@@ -37,10 +38,10 @@ func (apiCfg *apiConfig) handlerCreateUser(w http.ResponseWriter, r *http.Reques
 		return
 	}
 
-	respondWithJSON(w, http.StatusCreated, databaseUserToUser(user))
+	respondWithJSON(w, http.StatusCreated, models.DatabaseUserToUser(user))
 }
 
-func (apiCfg *apiConfig) handlerGetUser(w http.ResponseWriter, r *http.Request, user database.User) {
+func (apiCfg *ApiConfig) HandlerGetUser(w http.ResponseWriter, r *http.Request, user database.User) {
 
-	respondWithJSON(w, http.StatusOK, databaseUserToUser(user))
+	respondWithJSON(w, http.StatusOK, models.DatabaseUserToUser(user))
 }

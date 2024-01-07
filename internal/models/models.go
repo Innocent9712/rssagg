@@ -1,4 +1,4 @@
-package main
+package models
 
 import (
 	"time"
@@ -16,7 +16,7 @@ type User struct {
 	ApiKey    string    `json:"api_key"`
 }
 
-func databaseUserToUser(dbUser database.User) User {
+func DatabaseUserToUser(dbUser database.User) User {
 	return User{
 		ID:        dbUser.ID.String(),
 		ApiKey:    dbUser.ApiKey,
@@ -35,7 +35,7 @@ type Feed struct {
 	UserID    string    `json:"user_id"`
 }
 
-func databaseFeedToFeed(dbFeed database.Feed) Feed {
+func DatabaseFeedToFeed(dbFeed database.Feed) Feed {
 	return Feed{
 		ID:        dbFeed.ID.String(),
 		Name:      dbFeed.Name,
@@ -46,10 +46,10 @@ func databaseFeedToFeed(dbFeed database.Feed) Feed {
 	}
 }
 
-func databaseFeedsToFeeds(dbFeeds []database.Feed) []Feed {
+func DatabaseFeedsToFeeds(dbFeeds []database.Feed) []Feed {
 	feeds := make([]Feed, 0)
 	for _, feed := range dbFeeds {
-		feeds = append(feeds, databaseFeedToFeed(feed))
+		feeds = append(feeds, DatabaseFeedToFeed(feed))
 	}
 	return feeds
 }
@@ -67,7 +67,7 @@ type FeedFollows struct {
 	Feed Feed `json:"feed"`
 }
 
-func databaseFeedFollowToFeedFollow(dbFeedFollow database.FeedFollow) FeedFollow {
+func DatabaseFeedFollowToFeedFollow(dbFeedFollow database.FeedFollow) FeedFollow {
 	return FeedFollow{
 		ID:        dbFeedFollow.ID.String(),
 		CreatedAt: dbFeedFollow.CreatedAt,
@@ -77,7 +77,7 @@ func databaseFeedFollowToFeedFollow(dbFeedFollow database.FeedFollow) FeedFollow
 	}
 }
 
-func databaseFeedFollowsToFeedFollows(dbFeedFollows []database.GetFeedFollowsRow) []FeedFollows {
+func DatabaseFeedFollowsToFeedFollows(dbFeedFollows []database.GetFeedFollowsRow) []FeedFollows {
 	feedFollows := make([]FeedFollows, 0)
 	for _, dbFeedFollow := range dbFeedFollows {
 		feedFollow := FeedFollows{
@@ -113,7 +113,7 @@ type Post struct {
 	FeedID      string    `json:"feed_id"`
 }
 
-func databasePostsToPosts(dbPosts []database.Post) []Post {
+func DatabasePostsToPosts(dbPosts []database.Post) []Post {
 	var posts []Post
 	for _, dbPost := range dbPosts {
 

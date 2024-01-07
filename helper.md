@@ -21,3 +21,8 @@ go get -u github.com/lib/pq
 
 then add this to the imports of the file where the connection was initialized:
 	_ "github.com/lib/pq"
+
+
+Extra:
+
+I setup a Makefile to build, run and clean the project
